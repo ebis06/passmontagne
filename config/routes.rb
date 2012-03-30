@@ -1,5 +1,7 @@
 Passmontagne::Application.routes.draw do
 
+  resources :routes
+
   resources :users
   resources :sessions, only: [:new, :create, :destroy]
 
