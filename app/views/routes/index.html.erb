@@ -1,5 +1,26 @@
 <h1>Listing routes</h1>
-
+<script type="Text/Javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/assets/js/jquery.sudoSlider.min.js"></script>
+ <script type="text/javascript" >
+   $(document).ready(function(){  
+      var sudoSlider = $("#slider").sudoSlider({ 
+         fade: true,
+         auto:true,
+         prevNext:false
+      });
+   });
+   </script>
+<center>
+<div id="slider" >
+    <ul>
+        <li><img src="/assets/01.jpg" alt="image description"/></li>
+        <li><img src="/assets/02.jpg" alt="image description"/></li>
+        <li><img src="/assets/03.jpg" alt="image description"/></li>
+        <li><img src="/assets/04.jpg" alt="image description"/></li>
+        <li><img src="/assets/05.jpg" alt="image description"/></li>  
+    </ul>
+</div>
+</center>
 <table>
   <tr>
     <th>Title</th>

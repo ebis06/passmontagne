@@ -1,3 +1,20 @@
 // Place all the styles related to the Routes controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+
+#slider, slider li {
+    width:696px;
+  overflow:hidden; 
+}
+#slider img{
+    border:none;
+}
+#slider ul, #slider li{
+    position:relative;
+    margin:0;
+    padding:0;
+    list-style:none;
+  display:block;
+}
+

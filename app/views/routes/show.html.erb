@@ -1,20 +1,112 @@
-<p id="notice"><%= notice %></p>
+i<p id="notice"><%= notice %></p>
 
-<p>
-  <b>Title:</b>
-  <%= @route.title %>
-</p>
+<div class="row-fluid">
+  <div class="span12">
+	
+	<p>
+  		<b>Title:</b>
+  		<%= @route.title %>
+	</p>
+  </div>
+</div>
 
-<p>
-  <b>Description:</b>
-  <%= @route.description %>
-</p>
+<div class="row-fluid">
+  <div class="span4">
+	<p>
+  		<b>Description:</b>
+  		<%= @route.description %>
+	</p>
+  </div>
+
+  <div class="span8">
+	<p>
+  		<b>Image:</b>
+  		<%= image_tag @route.image.url %>
+	</p>
+  </div>
+</div>
+
+<div class="row-fluid">
+  <div class="span12">
+
+    <script type="text/javascript" src="http://api.ign.fr/geoportail/api/js/2.0.0beta/Geoportal.js"></script>
+    
+    <script type="text/javascript"
+          src="http://api.ign.fr/geoportail/api/js/latest/GeoportalExtended.js">
+    </script>
+
+    <script type="text/javascript">
+      var viewer = null;
+      var tracelayer;
+      const APIkey= 'l31mzkwjtsfac9x6wqbxbunc';
+
+  
+	    function zoomToFit() {
+        viewer.getMap().zoomToExtent(tracelayer.getDataExtent());
+      }
+
+      function initMap() {
+        // ----- Options
+        var options= {
+        // mode:'normal',
+        //territory:'FXX'
+          type:'js',
+          strokeColor: '#FF0000',
+          strokeWidth: 3,
+          strokeOpacity: 1
+        };
+
+        var styleMapSimple = new OpenLayers.StyleMap({
+          strokeColor: '#FF0000',
+          strokeWidth: 3,
+          strokeOpacity: 1
+        });
+
+        var gpx_name = '/system/traces/<%= @route.id %>/original/<%= @route.trace_file_name  %>'; // for string
+      
+        viewer= new Geoportal.Viewer.Default('viewerDiv', OpenLayers.Util.extend(
+          options,
+          // API keys configuration variable set by <Geoportal.GeoRMHandler.getConfig>
+          // variable contenant la configuration des clefs API remplie par <Geoportal.GeoRMHandler.getConfig>
+          window.gGEOPORTALRIGHTSMANAGEMENT===undefined? {'apiKey':APIkey} : gGEOPORTALRIGHTSMANAGEMENT)
+        );
+        if (!viewer) {
+          // problem ...
+          OpenLayers.Console.error(OpenLayers.i18n('new.instance.failed'));
+          return;
+        }
+        // ----- Layers
+        viewer.addGeoportalLayers(['ORTHOIMAGERY.ORTHOPHOTOS','GEOGRAPHICALGRIDSYSTEMS.MAPS']); 
+        tracelayer = viewer.getMap().addLayer("GPX","Parcours",gpx_name,{visibility:true,minZoomLevel:0,maxZoomLevel:100,styleMap: styleMapSimple});
+  
+        tracelayer.events.register('loadend',tracelayer, function(e){zoomToFit();});
+      }
+      /**
+      * Function: loadAPI
+      * Load the configuration related with the API keys.
+      * Called on "onload" event.
+      * Call <initMap>() function to load the interface.
+      */
+      function loadAPI() {
+        // wait for all classes to be loaded
+        // on attend que les classes soient chargées
+    
+        Geoportal.GeoRMHandler.getConfig([APIkey], null,null, {
+        onContractsComplete: initMap
+      });
+    }
+    // assign callback when "onload" event is fired
+    // assignation de la fonction à appeler lors de la levée de l'évènement "onload"
+    window.onload= loadAPI;
+    </script>
+  <div id="viewerDiv" style="width:400px;height:600px;"></div>
+  </div>
+</div>
 
 <p>
   <b>Price:</b>
   <%= @route.price %>
 </p>
-
 
 <%= link_to 'Edit', edit_route_path(@route) %> |
 <%= link_to 'Back', routes_path %>
